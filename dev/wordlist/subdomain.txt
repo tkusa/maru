@@ -1,0 +1,8 @@
+dev
+stage
+prod
+test
+mail
+db
+internal
+www

@@ -1,0 +1,8 @@
+admin
+management
+test
+index.html
+index.php
+.git
+.svn
+.htaccess
