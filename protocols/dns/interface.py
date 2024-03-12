@@ -1,9 +1,10 @@
-import sys
 import dns.resolver
 import dns.rdatatype
 import dns.reversename
 import dns.zone
 import dns.query
+import time
+from common import config
 
 def requestRecord(domain, type):
     result = []
@@ -19,6 +20,7 @@ def requestRecord(domain, type):
         return result
     for rdata in answer:
         result.append(rdata.to_text())
+    time.sleep(config.MIN_WAIT)
     return result
 
 

@@ -1,6 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from common import log
 from protocols.dns import interface as DnsInterface
+from protocols.dns.domain import Domain
 from scan.dynamic.recon.scanner import Scanner
 
 class DnsScanner(Scanner):
@@ -12,7 +13,6 @@ class DnsScanner(Scanner):
         executor = ThreadPoolExecutor(max_workers=self.thread_cnt)
         threads = []
         for word in wordlist:
-            self.result[word] = {}
             future = executor.submit(self.thread_request, domain, word)
             threads.append(future)
         for t in as_completed(threads):
@@ -24,7 +24,9 @@ class DnsScanner(Scanner):
         answer = DnsInterface.requestA(query)
         self.request_cnt += 1
         if len(answer) != 0:
-            self.result[word]["A"] = answer
+            response = Domain(query)
+            response.ip = answer
+            self.result[word] = response
             self.success_cnt += 1
             log.success(f"{query}")
     

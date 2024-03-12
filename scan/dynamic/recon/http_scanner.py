@@ -12,7 +12,7 @@ class HttpScanner(Scanner):
         super().__init__(thread_cnt=thread_cnt)
         self.blacklist = blacklist
 
-    def bruteforceDir(self, url, wordlist, methods=[HttpMethod.GET], headers=[]):
+    def bruteforceDir(self, url, wordlist, methods=[HttpMethod.GET], headers={}):
         log.info(f"Directory Brutoforce : {url}")
         self.init_result()
         url = text.stripUrl(url)
@@ -22,24 +22,24 @@ class HttpScanner(Scanner):
         for word in wordlist:
             self.result[word] = {}
             for method in methods:
-                future = executor.submit(self.thread_request, url, word, method)
+                future = executor.submit(self.thread_request, url, word, method, headers)
                 threads.append(future)
         for t in as_completed(threads):
             print(f"{self.request_cnt} / {total}", end="\r")
 
         return self.result
 
-    def thread_request(self, url, word, method, headers=[]):
+    def thread_request(self, url, word, method, headers={}):
         target = url + word
         r = HttpInterface.request(method, target, headers=headers)
         self.request_cnt += 1
         if r.status not in self.blacklist:
-            self.result[word][method] = r
+            self.result[word][method.value] = r
             self.success_cnt += 1
             log.success(f"{method.value} /{word} {r.status}")
             
 
-    def enumerateEndpoint(self, url, headers=[]):
+    def enumerateEndpoint(self, url, headers={}):
         log.info(f"Endpoint Enumeration : {url}")
         self.init_result()
         origin = text.getOrigin(url)
@@ -49,6 +49,9 @@ class HttpScanner(Scanner):
         links = soup.find_all("a")
         for link in links:
             href = link["href"]
+            # javascript scheme
+            if href.lower().startswith("javascript"):
+                continue
             target_origin = text.getOrigin(href)
             if target_origin is not None and origin != target_origin:
                 continue
@@ -83,6 +86,10 @@ class HttpScanner(Scanner):
                 name = i.get("name")
                 if name is not None:
                     params[name] = ""
+            endpoint = Endpoint(target, HttpMethod.fromStr(method), params)
+            if target not in self.result:
+                self.result[target] = []
+            self.result[target].append(endpoint)
             params_str = params if len(params) > 0 else ""
             log.success(f"{method} {target} {params_str}")
         # iframe

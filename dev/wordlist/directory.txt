@@ -1,8 +1,5 @@
-admin
-management
 test
-index.html
-index.php
-.git
-.svn
-.htaccess
+test1
+test2
+atag3
+RecommendSelection/Beauty-Health-sc-017172970.html

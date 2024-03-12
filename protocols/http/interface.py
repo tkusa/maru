@@ -1,5 +1,6 @@
 import requests
-from common import log
+import time
+from common import config, log
 from protocols.http.method import HttpMethod
 from protocols.http.response import HttpResponse
 
@@ -34,6 +35,7 @@ def request(method, url, params=None, data=None, headers=None) -> HttpResponse:
         return None
     
     result = HttpResponse(response=r)
+    time.sleep(config.MIN_WAIT)
     return result
 
 

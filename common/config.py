@@ -15,6 +15,7 @@ DIR_LOG = "./dev/logs"
 DIR_TMP = "./dev/tmp"
 DIR_SAVE = "./dev/storage"
 DIR_WORDLIST = "./dev/wordlist"
+DIR_REPORT = "./dev/report"
 
 # Regex
 REGEX_URL = 'http[s]*://[^"]*'
@@ -36,12 +37,14 @@ HTTP_HEADERS = {
 
 HTTP_METHODS = [
     HttpMethod.GET, 
-    HttpMethod.POST, 
-    HttpMethod.PUT, 
-    HttpMethod.DELETE, 
-    HttpMethod.PATCH
+    # HttpMethod.POST, 
+    # HttpMethod.PUT, 
+    # HttpMethod.DELETE, 
+    # HttpMethod.PATCH
 ]
-HTTP_BLACKLIST = [404]
+HTTP_BLACKLIST = [404, 501]
 
 # Max threads
 MAX_THREADS = 3
+# Min wait
+MIN_WAIT = 0.1
