@@ -34,10 +34,10 @@ class HttpScanner(Scanner):
         target = url + word
         r = HttpInterface.request(method, target, headers=headers)
         # error on request
+        self.request_cnt += 1
         if r is None:
             self.error_cnt += 1
             return
-        self.request_cnt += 1
         if r.status not in self.blacklist:
             self.result[word][method.value] = r
             self.success_cnt += 1
