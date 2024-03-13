@@ -20,7 +20,8 @@ def main():
     thread = args.thread
 
     headers = {
-        "X-HackerOne-Research": "tkusa"
+        "User-Agent": "maru"
+        # "X-HackerOne-Research": "<hackerone>"
     }
 
     domain = text.getDomain(target)

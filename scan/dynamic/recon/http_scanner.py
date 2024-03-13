@@ -25,13 +25,18 @@ class HttpScanner(Scanner):
                 future = executor.submit(self.thread_request, url, word, method, headers)
                 threads.append(future)
         for t in as_completed(threads):
-            print(f"{self.request_cnt} / {total}", end="\r")
-
+            print(f"{self.request_cnt} / {total} (Error {self.error_cnt})", end="\r")
+        print(f"{self.request_cnt} / {total} (Error {self.error_cnt})")
+        print(f"{self.success_cnt} dirs found.")
         return self.result
 
     def thread_request(self, url, word, method, headers={}):
         target = url + word
         r = HttpInterface.request(method, target, headers=headers)
+        # error on request
+        if r is None:
+            self.error_cnt += 1
+            return
         self.request_cnt += 1
         if r.status not in self.blacklist:
             self.result[word][method.value] = r

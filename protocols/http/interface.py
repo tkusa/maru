@@ -22,16 +22,22 @@ def request(method, url, params=None, data=None, headers=None) -> HttpResponse:
         elif method == HttpMethod.PATCH:
             r = requests.patch(url, params=params, data=data, headers=headers)
         else:
+            log.error("Bad method.")
             return None
     except requests.ConnectionError:
+        log.error(f"Connection Error : {method.value} {url}")
         return None
     except requests.ConnectTimeout:
+        log.error(f"Connection Timeout : {method.value} {url}")
         return None
     except requests.HTTPError:
+        log.error(f"Http Error : {method.value} {url}")
         return None
     except requests.ReadTimeout:
+        log.error(f"Read Timeout : {method.value} {url}")
         return None
     except requests.RequestException:
+        log.error(f"Request Exception : {method.value} {url}")
         return None
     
     result = HttpResponse(response=r)

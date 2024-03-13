@@ -7,9 +7,11 @@ class Scanner:
         self.result = {}
         self.request_cnt = 0
         self.success_cnt = 0
+        self.error_cnt = 0
 
     def init_result(self):
         self.result = {}
         self.request_cnt = 0
         self.success_cnt = 0
+        self.error_cnt = 0
 
