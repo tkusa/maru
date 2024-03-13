@@ -6,6 +6,7 @@ from protocols.http.response import HttpResponse
 
 
 def request(method, url, params=None, data=None, headers=None) -> HttpResponse:
+    time.sleep(config.MIN_WAIT)
     try:
         if method == HttpMethod.GET:
             r = requests.get(url, params=params, data=data, headers=headers)
@@ -22,26 +23,25 @@ def request(method, url, params=None, data=None, headers=None) -> HttpResponse:
         elif method == HttpMethod.PATCH:
             r = requests.patch(url, params=params, data=data, headers=headers)
         else:
-            log.error("Bad method.")
+            log.fail("Bad method.")
             return None
     except requests.ConnectionError:
-        log.error(f"Connection Error : {method.value} {url}")
+        log.fail(f"Connection Error : {method.value} {url}")
         return None
     except requests.ConnectTimeout:
-        log.error(f"Connection Timeout : {method.value} {url}")
+        log.fail(f"Connection Timeout : {method.value} {url}")
         return None
     except requests.HTTPError:
-        log.error(f"Http Error : {method.value} {url}")
+        log.fail(f"Http Error : {method.value} {url}")
         return None
     except requests.ReadTimeout:
-        log.error(f"Read Timeout : {method.value} {url}")
+        log.fail(f"Read Timeout : {method.value} {url}")
         return None
     except requests.RequestException:
-        log.error(f"Request Exception : {method.value} {url}")
+        log.fail(f"Request Exception : {method.value} {url}")
         return None
     
     result = HttpResponse(response=r)
-    time.sleep(config.MIN_WAIT)
     return result
 
 
