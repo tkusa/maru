@@ -42,7 +42,7 @@ HTTP_METHODS = [
     # HttpMethod.DELETE, 
     # HttpMethod.PATCH
 ]
-HTTP_BLACKLIST = [404, 501]
+HTTP_BLACKLIST = [404, 421, 501]
 
 # Max threads
 MAX_THREADS = 3

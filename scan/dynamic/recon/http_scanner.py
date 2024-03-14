@@ -53,6 +53,8 @@ class HttpScanner(Scanner):
         # a
         links = soup.find_all("a")
         for link in links:
+            if "href" not in link:
+                continue
             href = link["href"]
             # javascript scheme
             if href.lower().startswith("javascript"):
