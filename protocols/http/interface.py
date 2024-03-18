@@ -9,19 +9,19 @@ def request(method, url, params=None, data=None, headers=None) -> HttpResponse:
     time.sleep(config.MIN_WAIT)
     try:
         if method == HttpMethod.GET:
-            r = requests.get(url, params=params, data=data, headers=headers)
+            r = requests.get(url, params=params, data=data, headers=headers, verify=False)
         elif method == HttpMethod.HEAD:
-            r = requests.head(url, params=params, data=data, headers=headers)
+            r = requests.head(url, params=params, data=data, headers=headers, verify=False)
         elif method == HttpMethod.POST:
-            r = requests.post(url, params=params, data=data, headers=headers)
+            r = requests.post(url, params=params, data=data, headers=headers, verify=False)
         elif method == HttpMethod.PUT:
-            r = requests.put(url, params=params, data=data, headers=headers)
+            r = requests.put(url, params=params, data=data, headers=headers, verify=False)
         elif method == HttpMethod.DELETE:
-            r = requests.delete(url, params=params, data=data, headers=headers)
+            r = requests.delete(url, params=params, data=data, headers=headers, verify=False)
         elif method == HttpMethod.OPTIONS:
-            r = requests.options(url, params=params, data=data, headers=headers)
+            r = requests.options(url, params=params, data=data, headers=headers, verify=False)
         elif method == HttpMethod.PATCH:
-            r = requests.patch(url, params=params, data=data, headers=headers)
+            r = requests.patch(url, params=params, data=data, headers=headers, verify=False)
         else:
             log.fail("Bad method.")
             return None

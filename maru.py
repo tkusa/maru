@@ -3,6 +3,7 @@ from common import config, io, text
 from protocols.http.method import HttpMethod
 from scan.dynamic.recon.dns_scanner import DnsScanner 
 from scan.dynamic.recon.http_scanner import HttpScanner 
+from scan.dynamic.recon.xss_scanner import XssScanner 
 from report import markdown
 
 def main():
@@ -12,15 +13,17 @@ def main():
     )
     parser.add_argument('action')
     parser.add_argument('target')
+    parser.add_argument('-p', '--param')
     parser.add_argument('-t', '--thread', default=3)
     args = parser.parse_args()
 
     action = args.action
     target = args.target
+    param = args.param
     thread = args.thread
 
     headers = {
-        "User-Agent": "maru"
+        "User-Agent": "maru",
         # "X-HackerOne-Research": "<hackerone>"
     }
 
@@ -67,6 +70,8 @@ def main():
             endpoint_result = endpoint(site["url"], headers=headers)
             markdown.endpoint_report(endpoint_dir + f"/{cnt}.md", endpoint_result)
             cnt += 1
+    if action == "all" or action == "xss":
+        rxss(target, param)
             
             
 
@@ -87,6 +92,11 @@ def endpoint(url, blacklist=config.HTTP_BLACKLIST, thread_cnt=config.MAX_THREADS
     http = HttpScanner(thread_cnt=thread_cnt, blacklist=blacklist)
     result = http.enumerateEndpoint(url, headers)
     return result
+
+def rxss(url, target, params={}, thread_cnt=config.MAX_THREADS):
+    xss = XssScanner(thread_cnt=thread_cnt)
+    result = xss.checkReflectedXss(url, target, params)
+
 
 if __name__ == "__main__":
     main()
